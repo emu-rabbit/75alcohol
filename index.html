@@ -1,6 +1,56 @@
 <head>
 	<title>我需要多少酒精呢</title>
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
-	test
+	<div id="root" class="d-flex justify-content-center container">
+		<form style="width: 100%">
+			<div class="form-row text-center col-12" style="width: 100%;">
+				<div id="input_section" class="col">
+					<div class="d-inline-block col-9 text-right" style="padding-right: 0px;">
+						<input id="input" type="number" class="form-control" placeholder="請輸入你手中的酒精濃度(%)">
+					</div>
+					<div class="d-inline-block col-2 text-left" style="padding-left: 0px;">
+						<button id="submit" class="btn btn-info" style="margin-top: -6px;">送出</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="d-flex justify-content-center container" style="margin-top: 30px;">
+		<table class="table table-bordered text-center">
+			<tr>
+				<td id="result_header" colspan="2">
+					<p>等待輸入中^_^</p>
+				</td>
+			</tr>
+		</table>
+	</div>
 </body>
+
+<style type="text/css">
+	#input_section{
+		margin-top: 10px;
+		width: 100%;
+	}
+	#result_header p{
+		margin: auto;
+	}
+</style>
+
+<script type="text/javascript">
+	$("#submit").on("click", function(event){
+		event.preventDefault();
+
+		var concentration = $("#input").val();
+		var ratio = caluRatio(concentration);
+		$("#result_header").empty();
+		$("#result_header").append("<p>你輸入的是" + concentration + "%</p>");
+		$("#result_header").append("<p>最佳比例是" + parseFloat(ratio.toFixed(2)) + "酒精 : 1水</p>");
+
+	});
+	function caluRatio(concentration){
+		return 1 / (concentration / 75 - 1);
+	}
+</script>
