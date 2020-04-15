@@ -2,28 +2,27 @@
 	<title>我需要多少酒精呢</title>
 	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 <body>
 	<div class="container">
-		<h1 style="margin: 20px;">75%酒精計算機</h1>
-		<h4 style="margin-left: 70px;">在這裡，你可以透過輸入手中酒精的濃度</h3>
-		<h4 style="margin-left: 70px;"	>網頁會幫你計算75%的酒精需要多少的水和你手中的酒精^_^</h3>
+		<h1 style="margin: 40px;">75%酒精計算機</h1>
+		<h6>在這裡，你可以透過輸入手中酒精的濃度</h3>
+		<h6>網頁會幫你計算75%的酒精需要多少的水和酒精^_^</h3>
 	</div>
-	<div class="d-flex justify-content-center container">
+	<div class="container">
 		<form style="width: 100%">
-			<div class="form-row text-center col-12" style="width: 100%;">
-				<div id="input_section" class="col">
-					<div class="d-inline-block col-9 text-right" style="padding-right: 0px;">
-						<input id="input" type="number" class="form-control" placeholder="請輸入你手中的酒精濃度(%)">
-					</div>
-					<div class="d-inline-block col-2 text-left" style="padding-left: 0px;">
-						<button id="submit" class="btn btn-info" style="margin-top: -6px;">送出</button>
-					</div>
+			<div  id="input_section" class="col form-row text-center">
+				<div class="col-9 col-sm-11 text-right">
+					<input id="input" type="number" class="form-control" placeholder="請輸入你手中的酒精濃度(%)">
+				</div>
+				<div class="col-3 col-sm-1 text-left">
+					<button id="submit" class="btn btn-info">送出</button>
 				</div>
 			</div>
 		</form>
 	</div>
-	<div class="d-flex justify-content-center container" style="margin-top: 30px;">
+	<div class="container" style="margin-top: 30px;">
 		<table id="result_table" class="table table-bordered text-center">
 			<tr>
 				<td id="result_header" colspan="3">
@@ -45,50 +44,90 @@
 					
 				</td>
 			</tr>
+			<tr>
+				<td id="info_tr" colspan="3">
+					<p>由於小數點處理的關係，在某些情況下會造成最後調出來的酒精不是完美的75%</p>
+					<p>你可以嘗試用不同的量進行計算，這邊推薦2、3或5的倍數</p>
+					<p>或是你想要<button id="auto_search" class="btn btn-outline-success btn-sm" type="button">自動尋找離當前最近的75%</button></p>
+				</td>
+			</tr>
 		</table>
 	</div>
 </body>
 
 <style type="text/css">
 	#input_section{
-		margin-top: 10px;
-		width: 100%;
+		margin-top: 20px;
 	}
 	#result_table{
 		display: none;
 	}
-	#result_header p{
+	#result_table p{
 		margin: auto;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+	#info_tr{
+		display: none;
+	}
+	#auto_search{
+		margin-left: 10px;
 	}
 </style>
 
 <script type="text/javascript">
 	var ratio = 0;
+	var PRECISION = 0.001
 	$("#submit").on("click", function(event){
 		event.preventDefault();
 
 		var concentration = $("#input").val();
-		ratio = caluRatio(concentration);
-		console.log(ratio);
 		$("#result_table").show();
 		$("#result_header").empty();
+
+		if(concentration == 75){
+			$("#result_header").append("<p>恭喜你，你手上的酒精是黃金比例75%</p>");
+			$("#result_header").append("<p>這酒精不須加任何水就可以直接當75%使用囉！</p>");
+			$("#result_header").append("<p><del>因為他本來就是75%酒精啊！(／‵Д′)／~ ╧╧</del></p>");
+			return;
+		}else if(concentration < 0){
+			$("#result_header").append("<p>負.....負的濃度？Σ(;ﾟдﾟ)</p>");
+			$("#result_header").append("<p>太厲害啦！怎麼辦到的！</p>");
+			$("#result_header").append("<p><del>請認真輸入！(ﾟ皿ﾟﾒ)</del></p>");
+			return;
+		}else if(concentration < 75){
+			$("#result_header").append("<p>低於75%的酒精是沒辦法和水混合成75%的(´;ω;`)</p>");
+			$("#result_header").append("<p>請重新輸入</p>");
+			return;
+		}else if(concentration > 100){
+			$("#result_header").append("<p>100%以上Σ(;ﾟдﾟ)</p>");
+			$("#result_header").append("<p>這東西太高級了，我沒辦法幫你計算<(_ _)></p>");
+			return;
+		}
+		ratio = caluRatio(concentration);
 		$("#result_header").append("<p>你輸入的是" + concentration + "%</p>");
 		$("#result_header").append("<p>最佳比例是" + parseFloat(ratio.toFixed(2)) + "酒精 : 1水</p>");
 
 		updateResultAll(ratio);
 	});
 
-	$("#alcohol_amount").keyup(function(event){
-		var water_amount = parseFloat(($("#alcohol_amount").val() / ratio).toFixed(0));
+	$("#alcohol_amount").keyup(onAlcoholChange);
+	$("#alcohol_amount").change(onAlcoholChange);
+
+	$("#water_amount").keyup(onWaterChange);
+	$("#water_amount").change(onWaterChange);
+
+	function onAlcoholChange(event){
+		var water_amount = countWater($("#alcohol_amount").val());
 		$("#water_amount").val(water_amount);
 		updateFinal();
-	});
+	}
 
-	$("#water_amount").keyup(function(event){
-		var alcohol_amount = parseFloat(($("#water_amount").val() * ratio).toFixed(0));
+	function onWaterChange(event) {
+		var alcohol_amount = countAlcohol($("#water_amount").val());;
 		$("#alcohol_amount").val(alcohol_amount);
 		updateFinal();
-	});
+	}
 
 	function updateResultAll(ratio){
 		var water_amount = 100;
@@ -96,18 +135,87 @@
 		$("#alcohol_amount").val(alcohol_amount);
 		$("#water_amount").val(water_amount);
 		
+		autoSearch();
+	}
+
+	function is75(water_amount, alcohol_amount, input){
+		var finalCon = parseFloat(calcuConsentration(water_amount, alcohol_amount, input).toFixed(2));
+		if(Math.abs(finalCon - 75) < PRECISION){
+			return true;
+		}
+		return false;
+	}
+
+	function autoSearch(event){
+		var water_amount = parseFloat($("#water_amount").val());
+		var alcohol_amount = parseFloat($("#alcohol_amount").val());
+		var input = parseFloat($("#input").val());
+
+		for(var i = 1; i <= 500; i ++){
+			var newWater, newAlcohol;
+
+			newWater = water_amount - i;
+			newAlcohol = countAlcohol(newWater);
+			if(newWater > 0 && is75(newWater, newAlcohol, input)){
+				setUpAndFinal(newWater, newAlcohol);
+				return true;
+			}
+			newWater = water_amount + i;
+			newAlcohol = countAlcohol(newWater);
+			if(is75(newWater, newAlcohol, input)){
+				setUpAndFinal(newWater, newAlcohol);
+				return true;
+			}
+
+			newAlcohol = alcohol_amount - i;
+			newWater = countWater(newAlcohol);
+			if(newAlcohol > 0 && is75(newWater, newAlcohol, input)){
+				setUpAndFinal(newWater, newAlcohol);
+				return true;
+			}
+			newAlcohol = alcohol_amount + i;
+			newWater = countWater(newAlcohol);
+			if(is75(newWater, newAlcohol, input)){
+				setUpAndFinal(newWater, newAlcohol);
+				return true;
+			}
+		}
+	}
+
+	$("#auto_search").click(autoSearch);
+
+	function setUpAndFinal(water, alcohol){
+		$("#water_amount").val(water);
+		$("#alcohol_amount").val(alcohol);
+
 		updateFinal();
+
+	}
+
+	function countAlcohol(water){
+		return parseFloat((water * ratio).toFixed(0));
+	}
+
+	function countWater(alcohol){
+		return parseFloat((alcohol / ratio).toFixed(0));
 	}
 
 	function updateFinal(){
 		var water_amount = parseFloat($("#water_amount").val());
 		var alcohol_amount = parseFloat($("#alcohol_amount").val());
 		var input = parseFloat($("#input").val());
+		var finalCon = parseFloat(calcuConsentration(water_amount, alcohol_amount, input).toFixed(2));
 		var str = "<p>";
-		str += parseFloat(calcuConsentration(water_amount, alcohol_amount, input).toFixed(2));
+		str += finalCon;
 		str += "%</p>"
 		$("#final_ratio").empty();
 		$("#final_ratio").append(str);
+
+		if(Math.abs(finalCon - 75) > PRECISION){
+			$("#info_tr").show();
+		}else{
+			$("#info_tr").hide();
+		}
 	}
 
 	function calcuConsentration(water_amount, alcohol_amount, alcohol_concentration){
