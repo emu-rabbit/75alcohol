@@ -13,10 +13,10 @@
 	<div class="container">
 		<form style="width: 100%">
 			<div  id="input_section" class="col form-row text-center">
-				<div class="col-9 col-sm-11 text-right">
+				<div class="col-9 col-sm-10 col-lg-11 text-right">
 					<input id="input" type="number" class="form-control" placeholder="請輸入你手中的酒精濃度(%)">
 				</div>
-				<div class="col-3 col-sm-1 text-left">
+				<div class="col-3 col-sm-2 col-lg-1 text-left">
 					<button id="submit" class="btn btn-info">送出</button>
 				</div>
 			</div>
@@ -31,7 +31,6 @@
 			<tr>
 				<td>酒精用量(ml)</td>
 				<td>水用量(ml)</td>
-				<td>最終濃度</td>
 			</tr>
 			<tr>
 				<td>
@@ -40,14 +39,18 @@
 				<td>
 					<input id="water_amount" class="form-control text-center" type="number">
 				</td>
+			</tr>
+			<tr>
+				<td>最終濃度</td>
 				<td id="final_ratio">
 					
 				</td>
 			</tr>
 			<tr>
 				<td id="info_tr" colspan="3">
-					<p>由於小數點處理的關係，在某些情況下會造成最後調出來的酒精不是完美的75%</p>
-					<p>你可以嘗試用不同的量進行計算，這邊推薦2、3或5的倍數</p>
+					<p>由於小數點處理的關係</p>
+					<p>在某些情況下會造成最後調出來的酒精不是完美的75%</p>
+					<p>你可以嘗試用不同的量進行計算</p>
 					<p>或是你想要<button id="auto_search" class="btn btn-outline-success btn-sm" type="button">自動尋找離當前最近的75%</button></p>
 				</td>
 			</tr>
@@ -82,6 +85,7 @@
 		event.preventDefault();
 
 		var concentration = $("#input").val();
+		console.log(concentration);
 		$("#result_table").show();
 		$("#result_header").empty();
 
