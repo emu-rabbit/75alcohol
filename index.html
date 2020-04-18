@@ -45,6 +45,12 @@
 				</td>
 			</tr>
 			<tr class="amount_info">
+				<td>總用量(ml)</td>
+				<td>
+					<input id="all_amount" min="0" class="form-control text-center" type="number">
+				</td>
+			</tr>
+			<tr class="amount_info">
 				<td>最終濃度</td>
 				<td id="final_ratio">
 					
@@ -213,6 +219,9 @@
 	$("#water_amount").keyup(onWaterChange);
 	$("#water_amount").change(onWaterChange);
 
+	$("#all_amount").keyup(onAllChange);
+	$("#all_amount").change(onAllChange);
+
 	function removeZero(str){
 		while(str.charAt(0) == "0" && str.length != 1){
 			str = str.slice(1);
@@ -220,12 +229,20 @@
 		return str;
 	}
 
+	function isNotVaildKey(key){
+		return event.key && !isFinite(event.key) && event.key != "-" && event.key != "Backspace" && event.key != ".";
+	}
+
 	function onAlcoholChange(event){
+		if(isNotVaildKey(event.key)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#alcohol_amount").val());
 		var alcohol_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
 		if(alcohol_amount < 0){
 			$("#alcohol_amount").val("");
+			$("#water_amount").val(0);
+			updateFinal();
+			return;
 		}
 		var water_amount = countWater(alcohol_amount);
 		$("#water_amount").val(water_amount);
@@ -233,14 +250,40 @@
 	}
 
 	function onWaterChange(event){
+		if(isNotVaildKey(event.key)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#water_amount").val());
 		var water_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
 		if(water_amount < 0){
+			$("#alcohol_amount").val(0);
 			$("#water_amount").val("");
+			updateFinal();
+			return;
 		}
 		var alcohol_amount = countAlcohol(water_amount);
 		$("#alcohol_amount").val(alcohol_amount);
+		updateFinal();
+	}
+
+	function onAllChange(event){
+		if(isNotVaildKey(event.key)) return;
+		$("#info_tr").hide();
+		var inputFixed = removeZero($("#all_amount").val());
+		var all_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
+		if(all_amount <= 0){
+			$("#alcohol_amount").val(0);
+			$("#water_amount").val(0);
+			$("#all_amount").val("");
+			updateFinal();
+			return;
+		}
+		var alcohol_amount = Math.floor(all_amount / (ratio + 1) * ratio);
+		var water_amount = Math.floor(all_amount / (ratio + 1));
+		if(Math.abs(alcohol_amount + water_amount - all_amount) > PRECISION){
+			alcohol_amount = all_amount - water_amount;
+		}
+		$("#alcohol_amount").val(alcohol_amount);
+		$("#water_amount").val(water_amount);
 		updateFinal();
 	}
 
@@ -325,10 +368,14 @@
 	function updateFinal(){
 		var water_amount = parseFloat($("#water_amount").val());
 		var alcohol_amount = parseFloat($("#alcohol_amount").val());
+		var all_amount = water_amount + alcohol_amount;
 		var input = parseFloat($("#input").val());
 		var finalCon = parseFloat(calcuConsentration(water_amount, alcohol_amount, input).toFixed(4));
-		if(isNaN(finalCon)) finalCon = "-";
 
+		if(isNaN(finalCon)) finalCon = "-";
+		if(isNaN(all_amount)) all_amount = 0;
+
+		$("#all_amount").val(all_amount);
 		var str = "<p>";
 		str += finalCon;
 		str += "%</p>"
