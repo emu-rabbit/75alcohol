@@ -1,37 +1,28 @@
-## Welcome to GitHub Pages
+#75酒精計算機
+--
+[網頁範例](https://immortalmice.github.io/75alcohol/)
 
-You can use the [editor on GitHub](https://github.com/immortalmice/75alcohol.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+這是一個用酒精濃度，去推算出75%酒精需要的酒精和水的比例，並給出一個建議的用量
+可以透過輸入酒精用量、水用量之一，來自動計算另一個需要的用量
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+目標濃度預設為75%，可以點擊頁面中標題的連結來做更改
 
-### Markdown
+因為小數點處理的關係，有時候會出現些微與目標濃度相異的情況
+這時你可以嘗試設定為其他用量，或是你可以使用提示框中的自動搜尋按鈕
+自動搜尋會在當前酒精用量和水用量的+/-500範圍進行搜尋是否有與目標濃度相符的結果
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+**輸入中任何低於1<sup>-4</sup>以下的位數，本程式可能出現不精準的情況**
 
-```markdown
-Syntax highlighted code block
+#酒精調配模擬器
+--
+[網頁範例](https://immortalmice.github.io/75alcohol/simulator.html)
 
-# Header 1
-## Header 2
-### Header 3
+輸入酒精的濃度、酒精量、水量，來模擬計算最後的濃度為多少
 
-- Bulleted
-- List
+#資訊
+--
+作者：[immortalmice](https://github.com/immortalmice)
+網頁範例服務提供：[Github Pages](https://pages.github.com/)
 
-1. Numbered
-2. List
+如有任何疑問，請來信：[mausu2526@gmail.com](mausu2526@gmail.com)
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/immortalmice/75alcohol.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
