@@ -61,7 +61,7 @@
 					<p>由於小數點處理的關係</p>
 					<p>在某些情況下會造成最後調出來的酒精不是完美的<span class="descript_con">75%</span></p>
 					<p>你可以嘗試用不同的量進行計算</p>
-					<p>或是你想要<button id="auto_search" class="btn btn-outline-success btn-sm" type="button">自動尋找離當前最近的75%</button></p>
+					<p>或是你想要<button id="auto_search" class="btn btn-outline-success btn-sm" type="button">自動尋找離當前最近的<span class="descript_con">75%</span></button></p>
 				</td>
 			</tr>
 			<tr>
@@ -187,7 +187,7 @@
 		$("#result_header").append("<p>最佳比例是<span style=\"color:red;\">" + parseFloat(ratio.toFixed(2)) + "酒精 : 1水</span></p>");
 		$(".amount_info").show();
 
-		updateResultAll(ratio);
+		updateResultAll();
 		$("#not_found").hide();
 	});
 
@@ -230,11 +230,11 @@
 	}
 
 	function isNotVaildKey(key){
-		return event.key && !isFinite(event.key) && event.key != "-" && event.key != "Backspace" && event.key != ".";
+		return event != "isInit" && event.key && !isFinite(event.key) && event.key != "-" && event.key != "Backspace" && event.key != ".";
 	}
 
 	function onAlcoholChange(event){
-		if(isNotVaildKey(event.key)) return;
+		if(isNotVaildKey(event)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#alcohol_amount").val());
 		var alcohol_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
@@ -250,7 +250,7 @@
 	}
 
 	function onWaterChange(event){
-		if(isNotVaildKey(event.key)) return;
+		if(isNotVaildKey(event)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#water_amount").val());
 		var water_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
@@ -266,7 +266,7 @@
 	}
 
 	function onAllChange(event){
-		if(isNotVaildKey(event.key)) return;
+		if(isNotVaildKey(event)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#all_amount").val());
 		var all_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
@@ -287,12 +287,9 @@
 		updateFinal();
 	}
 
-	function updateResultAll(ratio){
-		var water_amount = 100;
-		var alcohol_amount = parseFloat((water_amount * ratio).toFixed(0));
-		$("#alcohol_amount").val(alcohol_amount);
-		$("#water_amount").val(water_amount);
-		
+	function updateResultAll(){
+		$("#all_amount").val(500);
+		onAllChange("isInit");
 		updateFinal();
 		autoSearch();
 	}
