@@ -237,7 +237,7 @@
 	}
 
 	function onAlcoholChange(event){
-		if(isNotVaildKey(event)) return;
+		//if(isNotVaildKey(event)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#alcohol_amount").val());
 		var alcohol_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
@@ -253,7 +253,7 @@
 	}
 
 	function onWaterChange(event){
-		if(isNotVaildKey(event)) return;
+		//if(isNotVaildKey(event)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#water_amount").val());
 		var water_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
@@ -269,7 +269,7 @@
 	}
 
 	function onAllChange(event){
-		if(isNotVaildKey(event)) return;
+		//if(isNotVaildKey(event)) return;
 		$("#info_tr").hide();
 		var inputFixed = removeZero($("#all_amount").val());
 		var all_amount = isNaN(parseFloat(inputFixed)) ? 0 : parseFloat(inputFixed);
