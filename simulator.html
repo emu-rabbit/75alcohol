@@ -1,0 +1,135 @@
+<head>
+	<title>酒精調配模擬器</title>
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+</head>
+<body>
+	<div class="container">
+		<h1 style="margin: 20px;">酒精調配模擬器</h1>
+		<h6>在這裡，你可以透過輸入酒精的濃度、酒精量、水量</h6>
+		<h6 style="margin-bottom: 30px;">網頁會幫你計算調配後的濃度為多少^_^</h6>
+	</div>
+	<div class="container">
+		<table id="result_table" class="table table-bordered text-center">
+			<tr>
+				<td>酒精濃度(%)</td>
+				<td>
+					<input id="alcohol_con" min="0" class="form-control text-center" type="number" value="100">
+				</td>
+			</tr>
+			<tr class="amount_info">
+				<td>酒精用量(ml)</td>
+				<td>
+					<input id="alcohol_amount" min="0" class="form-control text-center" type="number" value="75">
+				</td>
+			</tr>
+			<tr class="amount_info">
+				<td>水用量(ml)</td>
+				<td>
+					<input id="water_amount" min="0" class="form-control text-center" type="number" value="25">
+				</td>
+			</tr>
+			<tr class="amount_info">
+				<td>最終濃度</td>
+				<td id="final_ratio"></td>
+			</tr>
+		</table>
+	</div>
+	<div id="author" class="container text-center">
+		<p>本網站由<a href="https://github.com/immortalmice/75alcohol" target="_blank">鼠仙Immortalmice</a>製作</p>
+		<p>由<a href="https://pages.github.com/" target="_blank">Github Pages</a>提供服務</p>
+	</div>
+</body>
+
+<style type="text/css">
+	#author p{
+		margin: 0px;
+		font-size: 14px;
+	}
+	#author{
+		margin-top: 30px;
+	}
+	#result_table p{
+		margin: auto;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+	#result_table td{
+		vertical-align: middle!important;
+	}
+</style>
+
+<script type="text/javascript">
+	var PRECISION = 0.00001;
+
+	function removeZero(str){
+		while(str.charAt(0) == "0" && str.length != 1){
+			str = str.slice(1);
+		}
+		return str;
+	}
+
+	function update(){
+		$("#final_ratio").empty();
+
+		var con = parseFloat(removeZero($("#alcohol_con").val()));
+		var alcohol = parseFloat(removeZero($("#alcohol_amount").val()));
+		var water = parseFloat(removeZero($("#water_amount").val()));
+
+		var errorFlag = false;
+
+		if(isNaN(con)){
+			errorFlag = true;
+			$("#final_ratio").append("<p>酒精濃度無法被辨識為數字</p>");
+		}
+		if(isNaN(alcohol)){
+			errorFlag = true;
+			$("#final_ratio").append("<p>酒精用量無法被辨識為數字</p>");
+		}
+		if(isNaN(water)){
+			errorFlag = true;
+			$("#final_ratio").append("<p>水用量無法被辨識為數字</p>");
+		}
+
+		if(con < 0 || con > 100){
+			errorFlag = true;
+			$("#final_ratio").append("<p>酒精濃度範圍應在0~100%</p>");
+		}
+		if(alcohol < 0){
+			errorFlag = true;
+			$("#final_ratio").append("<p>酒精用量不可為負</p>");
+		}
+		if(water < 0){
+			errorFlag = true;
+			$("#final_ratio").append("<p>水用量不可為負</p>");
+		}
+		if(water + alcohol == 0){
+			errorFlag = true;
+			$("#final_ratio").append("<p>酒精與水用量相加不可為0</p>");
+		}
+
+		if(errorFlag) return;
+
+		var final_con = parseFloat(calcuConsentration(water, alcohol, con).toFixed(4));
+
+		if(isNaN(final_con)) final_con = "-";
+
+		$("#final_ratio").append("<p>" + final_con + "%</p>");
+	}
+
+	$("#alcohol_con").keyup(update);
+	$("#alcohol_con").change(update);
+
+	$("#alcohol_amount").keyup(update);
+	$("#alcohol_amount").change(update);
+
+	$("#water_amount").keyup(update);
+	$("#water_amount").change(update);
+
+	$(document).ready(update);
+
+	function calcuConsentration(water_amount, alcohol_amount, alcohol_concentration){
+		return (alcohol_concentration * alcohol_amount) / (water_amount + alcohol_amount);
+	}
+</script>
