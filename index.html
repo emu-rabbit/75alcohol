@@ -211,6 +211,9 @@
 		$(".descript_con").html(TARGET + "%");
 		$("title").html(TARGET + "%酒精計算機");
 		$("#targetModal").modal("hide");
+
+		$("#result_table").hide();
+		$("#input").val("");
 	});
 
 	$("#alcohol_amount").keyup(onAlcoholChange);
@@ -229,7 +232,7 @@
 		return str;
 	}
 
-	function isNotVaildKey(key){
+	function isNotVaildKey(event){
 		return event != "isInit" && event.key && !isFinite(event.key) && event.key != "-" && event.key != "Backspace" && event.key != ".";
 	}
 
