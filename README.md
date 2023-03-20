@@ -1,6 +1,6 @@
 #75酒精計算機
 --
-[網頁範例](https://immortalmice.github.io/75alcohol/)
+[網頁範例](https://emu-rabbit.github.io/75alcohol/)
 
 這是一個用酒精濃度，去推算出75%酒精需要的酒精和水的比例，並給出一個建議的用量
 可以透過輸入酒精用量、水用量或總用量之一，來自動計算其他的用量
@@ -15,13 +15,13 @@
 
 #酒精調配模擬器
 --
-[網頁範例](https://immortalmice.github.io/75alcohol/simulator.html)
+[網頁範例](https://emu-rabbit.github.io/75alcohol/simulator.html)
 
 輸入酒精的濃度、酒精量、水量，來模擬計算最後的濃度為多少
 
 #資訊
 --
-作者：[immortalmice](https://github.com/immortalmice)
+作者：[emu-rabbit](https://github.com/emu-rabbit)
 網頁範例服務提供：[Github Pages](https://pages.github.com/)
 
 如有任何疑問，請來信：[mausu2526@gmail.com](mausu2526@gmail.com)
